@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 #include <thead_matrix.h>
+#include "riscv_alias.h"
 #define N 16
 
 void __attribute__((noinline))
-print_data(const char *fmt, mint32_t ma, mint32_t mb, mint32_t ans, mrow_t mrow, mcol_t mcol)
+print_data(const char *fmt, __mint32_t ma, __mint32_t mb, __mint32_t ans, mrow_t mrow, mcol_t mcol)
 {
     unsigned int row, col;
     int32_t tmp_ma[N];
@@ -13,9 +14,9 @@ print_data(const char *fmt, mint32_t ma, mint32_t mb, mint32_t ans, mrow_t mrow,
 
     printf("%s:\n", fmt);
 
-    __riscv_th_mst(tmp_ma, 8, ma, mrow, mcol);
-    __riscv_th_mst(tmp_mb, 8, mb, mrow, mcol);
-    __riscv_th_mst(tmp_ans, 8, ans, mrow, mcol);
+    __riscv_th_mst_i32(tmp_ma, 8, ma, mrow, mcol);
+    __riscv_th_mst_i32(tmp_mb, 8, mb, mrow, mcol);
+    __riscv_th_mst_i32(tmp_ans, 8, ans, mrow, mcol);
 
     printf("ma:\t\tmb:\t\tans:\n");
     for (row = 0; row < mrow; row++)
@@ -54,13 +55,13 @@ int main()
     long stride = 2 * sizeof(int32_t); // sizeof(int32_t) * 2;
 
     /* init matrix value*/
-    mint32_t ma = __riscv_th_mld(x, stride, msize_m, msize_k);
-    mint32_t mb = __riscv_th_mld(y, stride, msize_m, msize_k);
-    mint32_t ans = __riscv_th_mld(z, stride, msize_m, msize_k);
+    __mint32_t ma = __riscv_th_mld(x, stride, msize_m, msize_k);
+    __mint32_t mb = __riscv_th_mld(y, stride, msize_m, msize_k);
+    __mint32_t ans = __riscv_th_mld(z, stride, msize_m, msize_k);
 
     print_data("Initial value of matrix", ma, mb, ans, msize_m, msize_k);
 
-    ans = __riscv_th_mmul_mm(ma, mb, msize_m, msize_k);
+    ans = __riscv_th_mmul_mm_i32(ma, mb, msize_m, msize_k);
 
     print_data("Results of multiplication", ma, mb, ans, msize_m, msize_k);
     return 0;

@@ -9,7 +9,8 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR riscv64)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=rv64gcv_zfh_xtheadc_xtheadmatrix -mabi=lp64d -O2")
 
-add_executable(Video_Matrix_Operators main.c)
+add_executable(Video_Matrix_Operators main.c
+        riscv_alias.h)
 
 target_link_libraries(Video_Matrix_Operators PRIVATE "-lm" "-static")
 
